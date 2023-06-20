@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, render_template
 
 app = Flask(__name__)
 
@@ -10,24 +10,18 @@ def list_files():
     root_dir = app.config['ROOT_DIR']
     return generate_directory_listing(root_dir)
 
-# Rota para realizar o download de um arquivo ou navegar em um diretório.
-@app.route('/<path:path>')
-def download_file(path):
+# Rota para exibir o conteúdo do arquivo
+@app.route('/file/<path:path>')
+def show_file_content(path):
     root_dir = app.config['ROOT_DIR']
     file_path = os.path.join(root_dir, path)
 
     if os.path.isfile(file_path):  # Verifica se é um arquivo
-        return send_from_directory(root_dir, path, as_attachment=True)
-    elif os.path.isdir(file_path):  # Verifica se é um diretório
-        return generate_directory_listing(file_path)
+        with open(file_path, 'r') as file:
+            content = file.read()
+            return render_template('file_content.html', content=content)
     else:
         return "Erro: Página não encontrada", 404
-
-# Rota para exibir o cabeçalho da requisição
-@app.route('/header')
-def show_header():
-    headers = request.headers  # Obtém o cabeçalho da requisição
-    return str(headers)
 
 # Função para gerar a listagem de arquivos e diretórios em um determinado diretório
 def generate_directory_listing(directory):
@@ -38,7 +32,7 @@ def generate_directory_listing(directory):
         file_url = file_path.replace(app.config['ROOT_DIR'], '', 1).lstrip('/')  # Gera a URL relativa ao diretório raiz
         if os.path.isdir(file_path):  # Verifica se é um diretório
             file += '/'
-        file_list += f"<li><a href='{file_url}'>{file}</a></li>"
+        file_list += f"<li><a href='/file/{file_url}'>{file}</a></li>"
     file_list += "</ul>"
     return file_list
 
@@ -54,7 +48,8 @@ if __name__ == "__main__":
             print("Diretório inválido.")
             sys.exit(1)
         app.config['ROOT_DIR'] = os.path.abspath(root_dir)
-        app.run(port=port)
+        os.environ['FLASK_ENV'] = 'production'  # Define a variável de ambiente FLASK_ENV como 'production'
+        app.run(host='0.0.0.0', port=port, debug=False)
     except ValueError:
         print("A porta deve ser um número inteiro válido.")
     except OSError as e:
