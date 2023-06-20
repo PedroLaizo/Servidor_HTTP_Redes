@@ -48,7 +48,7 @@ if __name__ == "__main__":
             print("Diretório inválido.")
             sys.exit(1)
         app.config['ROOT_DIR'] = os.path.abspath(root_dir)
-        os.environ['FLASK_ENV'] = 'production'  # Define a variável de ambiente FLASK_ENV como 'production'
+        app.env = 'production'  # Define o ambiente como 'production'
         app.run(host='0.0.0.0', port=port, debug=False)
     except ValueError:
         print("A porta deve ser um número inteiro válido.")
