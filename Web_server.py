@@ -25,7 +25,11 @@ def show_file_content(path):
 
 # Função para gerar a listagem de arquivos e diretórios em um determinado diretório
 def generate_directory_listing(directory):
-    files = os.listdir(directory)
+    try:
+        files = os.listdir(directory)
+    except FileNotFoundError:
+        return "Erro: Diretório não encontrado"
+    
     file_list = "<ul>"
     for file in files:
         file_path = os.path.join(directory, file)
