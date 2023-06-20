@@ -25,13 +25,13 @@ def show_file_content(path):
 
 # Função para gerar a listagem de arquivos e diretórios em um determinado diretório
 def generate_directory_listing(directory):
-    files = os.listdir(directory)  # Lista os arquivos e diretórios no diretório
+    files = os.listdir(directory)
     file_list = "<ul>"
     for file in files:
         file_path = os.path.join(directory, file)
-        file_url = file_path.replace(app.config['ROOT_DIR'], '', 1).lstrip('/')  # Gera a URL relativa ao diretório raiz
-        if os.path.isdir(file_path):  # Verifica se é um diretório
-            file += '/'
+        file_url = os.path.relpath(file_path, app.config['ROOT_DIR'])  # Gera a URL relativa ao diretório raiz
+        if os.path.isdir(file_path):
+            file_url += '/'
         file_list += f"<li><a href='/file/{file_url}'>{file}</a></li>"
     file_list += "</ul>"
     return file_list
