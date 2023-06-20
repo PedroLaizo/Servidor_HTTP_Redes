@@ -10,7 +10,7 @@ def list_files():
     root_dir = app.config['ROOT_DIR']
     return generate_directory_listing(root_dir)
 
-# Rota para realizar o download de um arquivo ou navegar em um diretório
+# Rota para realizar o download de um arquivo ou navegar em um diretório.
 @app.route('/<path:path>')
 def download_file(path):
     root_dir = app.config['ROOT_DIR']
