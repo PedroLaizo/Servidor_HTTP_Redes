@@ -29,13 +29,13 @@ def generate_directory_listing(directory):
         files = os.listdir(directory)
     except FileNotFoundError:
         return "Erro: Diretório não encontrado"
-    
+
     file_list = "<ul>"
     for file in files:
         file_path = os.path.join(directory, file)
-        file_url = os.path.relpath(file_path, app.config['ROOT_DIR']).replace("\\", "/")  # Gera a URL relativa ao diretório raiz
+        file_url = os.path.relpath(file_path, app.config['ROOT_DIR']).replace("\\", "/")
         if os.path.isdir(file_path):
-            file_url += '/'
+            file_url += '/' if not file_url.endswith('/') else ''  # Adiciona ou remove a barra final na URL
         file_list += f"<li><a href='/file/{file_url}'>{file}</a></li>"
     file_list += "</ul>"
     return file_list
