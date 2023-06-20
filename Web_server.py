@@ -24,7 +24,7 @@ def download_file(path):
         return "Erro: Página não encontrada", 404
 
 # Rota para exibir o cabeçalho da requisição
-@app.route('/HEADER')
+@app.route('/header')
 def show_header():
     headers = request.headers  # Obtém o cabeçalho da requisição
     return str(headers)
