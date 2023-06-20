@@ -24,7 +24,7 @@ def show_file_content(path):
         return "Erro: Página não encontrada", 404
 
 # Função para gerar a listagem de arquivos e diretórios em um determinado diretório
-ef generate_directory_listing(directory):
+def generate_directory_listing(directory):
     files = os.listdir(directory)
     file_list = "<ul>"
     for file in files:
